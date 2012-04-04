@@ -5,4 +5,4 @@ import cPickle
 import marshal
 
 services = parse_services(sys.stdin)
-print len(services)
+cPickle.dump(services, sys.stdout, protocol=2)

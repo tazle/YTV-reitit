@@ -1,4 +1,5 @@
 class Station(object):
+
     def __init__(self, name, location):
         """
         @param name Station name
@@ -7,14 +8,14 @@ class Station(object):
         self.name = name
         self.location = location
 
-    def __repr__(self):
-        return u"Station({}, {})".format(self.name, self.location)
-
-    def __str__(self):
-        return repr(self)
+    def __unicode__(self):
+        return u"Station(%s, %s)" % (self.name, self.location)
 
 
 class Stop(object):
+
+    __slots__ = ['station', 'time']
+
     def __init__(self, station, time):
         """
         @param station Station where this stop happens
@@ -23,7 +24,18 @@ class Stop(object):
         self.station = station
         self.time = time
 
+    def __unicode__(self):
+        return u'Stop(%s, %s)'% (unicode(self.station), self.time)
+
+    def __getstate__(self):
+        return (self.station, self.time)
+
+    def __setstate__(self, pickled):
+        self.station = pickled[0]
+        self.time = pickled[1]
+
 class Service(object):
+
     def __init__(self, line_id, mode, stops):
         """
         @param line_id Human-readable identifier of the service
@@ -33,3 +45,7 @@ class Service(object):
         self.line_id = line_id
         self.mode = mode
         self.stops = stops
+    
+    def __unicode__(self):
+        return u'Service(%s, %s, [%s])' % (self.line_id, self.mode, ", ".join(unicode(stop) for stop in self.stops))
+
