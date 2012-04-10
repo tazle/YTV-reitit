@@ -36,7 +36,9 @@ class Stop(object):
 
 class Service(object):
 
-    def __init__(self, line_id, mode, stops):
+    __slots__ = ['line_id', 'mode', 'stops', 'valid_dates']
+
+    def __init__(self, line_id, mode, stops, valid_dates):
         """
         @param line_id Human-readable identifier of the service
         @param mode Mode of service - bus, tram, metro
@@ -45,7 +47,21 @@ class Service(object):
         self.line_id = line_id
         self.mode = mode
         self.stops = stops
-    
+        self.valid_dates = valid_dates
+
     def __unicode__(self):
-        return u'Service(%s, %s, [%s])' % (self.line_id, self.mode, ", ".join(unicode(stop) for stop in self.stops))
+        return u'Service(%s, %s, [%s], [%s])' % (
+            self.line_id,
+            self.mode,
+            ", ".join(unicode(stop) for stop in self.stops),
+            ", ".join(unicode(date) for date in self.valid_dates))
+
+    def __getstate__(self):
+        return (self.line_id, self.mode, self.stops, self.valid_dates)
+
+    def __setstate__(self, pickled):
+        self.line_id = pickled[0]
+        self.mode = pickled[1]
+        self.stops = pickled[2]
+        self.valid_dates = pickled[3]
 
