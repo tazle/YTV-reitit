@@ -56,6 +56,15 @@ def parse_station(station_elem):
                    (float(station_elem.get('X')),
                     float(station_elem.get('Y'))))
 
+_timedeltas = {}
+def _str2timedelta(s):
+    if s in _timedeltas:
+        return _timedeltas[s]
+    else:
+        td = timedelta(hours=int(s[:2]), minutes=int(s[2:]))
+        _timedeltas[s] = td
+        return td
+
 def parse_service(service_elem, modes, stations, validity_sets):
     """
     Parse Kalkati Service element
@@ -84,13 +93,13 @@ def parse_service(service_elem, modes, stations, validity_sets):
             print >> sys.stderr, "No departure or arrival time", service_id
 
         stop_time = departure if departure is not None else arrival
-        stop_time = intern(stop_time)
+        stop_time = _str2timedelta(stop_time)
 
         stops.append(Stop(stop_station, stop_time))
         
         stop_type = stop_el.get('Type')
         if stop_type is not None:
-            print stop_type
+            print >> sys.stderr, stop_type
 
     return Service(line_id, line_mode, stops, validity_set)
 

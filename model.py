@@ -19,7 +19,10 @@ class Stop(object):
     def __init__(self, station, time):
         """
         @param station Station where this stop happens
-        @param time Time when this stop happens
+
+        @param time Time when this stop happens, as timedelta from
+        previous day change (36-hour clock is used, so late night
+        lines have times like 26:35 meaning 02:35 on the next day)
         """
         self.station = station
         self.time = time
