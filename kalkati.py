@@ -39,7 +39,8 @@ def parse_services(kalkati_file):
                 first_date_ = elem.get('Firstdate')
                 first_date = date(*map(int, first_date_.split('-')))
                 dates = set()
-                for n, is_date_valid in enumerate(map(bool, elem.get('Vector'))):
+                datebits = map(bool, map(int, elem.get('Vector')))
+                for n, is_date_valid in enumerate(datebits):
                     if is_date_valid:
                         dates.add(first_date + timedelta(n))
                 validity_sets[validity_set_id] = frozenset(dates)
