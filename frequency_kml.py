@@ -1,5 +1,5 @@
 import sys
-import cPickle as pickle
+from storage import unmarshal
 from itertools import ifilter
 from datetime import date, datetime, timedelta, time
 from collections import defaultdict
@@ -16,9 +16,10 @@ def gen_interval_pair_stoppings(services, cur_date):
 
     interval_pair_stoppings = defaultdict(lambda: defaultdict(lambda: []))
 
+    print >> sys.stderr, "Producing pairs"
     for n, service in enumerate(services):
         if n%1000 == 0:
-            print n
+            print >> sys.stderr, n
         if not cur_date in service.valid_dates:
             continue
         stop_pairs = zip(service.stops, service.stops[1:])
@@ -32,6 +33,7 @@ def gen_interval_pair_stoppings(services, cur_date):
     return interval_pair_stoppings
 
 def kml_pairs(interval_pair_stoppings, fname):
+    print >> sys.stderr, "Producing KML"
     kml = simplekml.Kml()
     for time_interval, pair_stoppings in interval_pair_stoppings.iteritems():
         for (frm, to), stoppings in pair_stoppings.iteritems():
@@ -42,7 +44,7 @@ def kml_pairs(interval_pair_stoppings, fname):
     kml.save(fname)
 
 def main():
-    services = pickle.load(sys.stdin)
+    services = unmarshal(sys.stdin)
     print len(services)
     ips = gen_interval_pair_stoppings(services, date(2012, 04, 10), )
     kml_pairs(ips, '2012-04-10.kml')
