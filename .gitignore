@@ -1,5 +1,8 @@
 all.zip
-LVM.xml
+*.xml
+*.pickle
+*.ytvf
+*.kml
 *~
 *.pyc
 env
