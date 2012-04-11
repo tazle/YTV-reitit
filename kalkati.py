@@ -27,10 +27,10 @@ def parse_services(kalkati_file):
                 modes[mode_id] = mode_name
                 elem.clear()
             elif elem.tag == 'Station':
-                station_id = elem.get('StationId')
                 if elem.get('X'):
                     try:
-                        stations[station_id] = parse_station(elem)
+                        station = parse_station(elem)
+                        stations[station.uid] = station
                     except Exception, e:
                         print >> sys.stderr, "Error parsing station", e, station_id
                 elem.clear()
@@ -52,7 +52,8 @@ def parse_station(station_elem):
 
     @param station_elem Station element as ETree Element
     """
-    return Station(station_elem.get('Name'),
+    return Station(station_elem.get('StationId'),
+                   station_elem.get('Name'),
                    (float(station_elem.get('X')),
                     float(station_elem.get('Y'))))
 
