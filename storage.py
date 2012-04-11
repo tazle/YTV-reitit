@@ -166,22 +166,19 @@ def decode_stations(fin, strings_l):
         
 def decode_services(fin, strings_l, validity_periods_l, stations_l):
     import sys
-    print >> sys.stderr, "Decoding services"
     count = decode_uint(fin)
     services = []
     for i in xrange(count):
-        if i%1000 == 0:
-            print >> sys.stderr, i
-        line_id = strings_l[decode_ushort(fin)]
-        mode = strings_l[decode_ushort(fin)]
-        validity_periods = validity_periods_l[decode_ushort(fin)]
-        stop_count = decode_ushort(fin)
+        line_id_idx, mode_id_idx, validity_period_idx, stop_count = struct.unpack("!HHHH", fin.read(8))
+        line_id = strings_l[line_id_idx]
+        mode = strings_l[mode_id_idx]
+        validity_periods = validity_periods_l[validity_period_idx]
+        stop_data = struct.unpack("!"+"HH"*stop_count, fin.read(4*stop_count))
         stops = []
-        for _ in xrange(stop_count):
-            station = stations_l[decode_ushort(fin)]
-            time_mins = decode_ushort(fin)
+        for i in xrange(stop_count):
+            station = stations_l[stop_data[2*i]]
+            time_mins = stop_data[2*i+1]
             time = dt.timedelta(hours=time_mins/60, minutes=time_mins%60)
             stops.append(Stop(station, time))
         services.append(Service(line_id, mode, stops, validity_periods))
-    print >> sys.stderr, "Finished decoding"
     return services
