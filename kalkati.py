@@ -2,14 +2,23 @@ import xml.etree.cElementTree as ET
 import sys
 from model import Station, Stop, Service
 from datetime import date, timedelta
+import re
 
-def parse_services(kalkati_file):
+def station_key_from_elem(elem, groups):
+    for group in groups:
+        if elem.get('StationId') in group:
+            return group[0]
+    return elem.get('StationId')
+
+def parse_services(kalkati_file, combination_groups=[]):
     """
     Parse kalkati file into a list of Services
     
-    @param kalkati_tree Kalkati XML file name or file object
+    @param kalkati_file Kalkati XML file name or file object
+    @param combination_file File that contains combining information for stations
     """
     
+    stations_by_key = {}
     stations = {}
     modes = {}
     validity_sets = {}
@@ -30,7 +39,13 @@ def parse_services(kalkati_file):
                 if elem.get('X'):
                     try:
                         station = parse_station(elem)
-                        stations[station.uid] = station
+                        station_id = station.uid
+                        station_key = station_key_from_elem(elem, combination_groups)
+                        if station_key in stations_by_key:
+                            station = stations_by_key[station_key]
+                        else:
+                            stations_by_key[station_key] = station
+                        stations[station_id] = station
                     except Exception, e:
                         print >> sys.stderr, "Error parsing station", e, station_id
                 elem.clear()
