@@ -1,5 +1,6 @@
 package fi.laurinolli.ytvreitit.model;
 
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -9,9 +10,9 @@ import java.util.Date;
  */
 public class Stop {
     private final Station station;
-    private final Date time;
+    private final Time time;
 
-    public Stop(final Station station, final Date time) {
+    public Stop(final Station station, final Time time) {
         this.station = station;
         this.time = time;
     }
@@ -20,7 +21,7 @@ public class Stop {
         return station;
     }
 
-    public Date getTime() {
+    public Time getTime() {
         return time;
     }
 
