@@ -7,3 +7,5 @@ all.zip
 *.pyc
 env
 env2
+.emacs.desktop
+*.kmz
