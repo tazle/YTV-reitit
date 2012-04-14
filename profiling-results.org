@@ -1,0 +1,28 @@
+* No profiling
+[13:49:23][tul@p020047][~/mun/YTV-reitit]% time pv LVM-combined.ytvf| env2/bin/pypy test.py
+19.6MB 0:00:05 [3.52MB/s] [=======================================================================================>] 100%            
+pv LVM-combined.ytvf  0.00s user 0.02s system 0% cpu 5.577 total
+env2/bin/pypy test.py  4.92s user 0.57s system 97% cpu 5.639 total
+* Stop and Service object creation removed
+13:50:53][tul@p020047][~/mun/YTV-reitit]% time pv LVM-combined.ytvf| env2/bin/pypy test.py
+19.6MB 0:00:01 [10.2MB/s] [=======================================================================================>] 100%            
+pv LVM-combined.ytvf  0.00s user 0.02s system 1% cpu 1.936 total
+env2/bin/pypy test.py  1.86s user 0.07s system 99% cpu 1.943 total
+* Stop object creation removed
+[13:51:29][tul@p020047][~/mun/YTV-reitit]% time pv LVM-combined.ytvf| env2/bin/pypy test.py
+19.6MB 0:00:02 [9.78MB/s] [=======================================================================================>] 100%            
+pv LVM-combined.ytvf  0.00s user 0.02s system 1% cpu 2.011 total
+env2/bin/pypy test.py  1.93s user 0.07s system 99% cpu 2.017 total
+* Number of stops
+  4732998
+* Replacing Stops with tuples
+[13:53:34][tul@p020047][~/mun/YTV-reitit]% time pv LVM-combined.ytvf| env2/bin/pypy test.py
+19.6MB 0:00:04 [4.37MB/s] [=======================================================================================>] 100%            
+pv LVM-combined.ytvf  0.00s user 0.02s system 0% cpu 4.500 total
+env2/bin/pypy test.py  4.10s user 0.44s system 99% cpu 4.553 total
+* Under cProfile
+[14:04:26][tul@p020047][~/mun/YTV-reitit]% time pv LVM.ytvf | env2/bin/python -m cProfile -o pypy.cprof test.py
+19.6MB 0:05:20 [62.7kB/s] [=======================================================================================>] 100%            
+pv LVM.ytvf  0.01s user 0.03s system 0% cpu 5:20.94 total
+env2/bin/python -m cProfile -o pypy.cprof test.py  316.82s user 2.82s system 99% cpu 5:21.32 total
+
