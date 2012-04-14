@@ -9,3 +9,6 @@ env
 env2
 .emacs.desktop
 *.kmz
+.idea
+target
+*.iml
