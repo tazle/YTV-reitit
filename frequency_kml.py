@@ -1,34 +1,10 @@
 import sys
 from storage import unmarshal
-from itertools import ifilter
 import datetime as dt
-from collections import defaultdict
 import simplekml
 import time
+from frequencies import instant, gen_time_intervals, gen_interval_pair_stoppings
 
-ZERO_TIME = dt.time(0, 0, 0)
-
-def instant(cur_date, td):
-    return dt.datetime.combine(cur_date, ZERO_TIME) + td
-
-def gen_interval_pair_stoppings(services, cur_date, time_intervals):
-    interval_pair_stoppings = defaultdict(lambda: defaultdict(lambda: []))
-
-    print >> sys.stderr, "Producing pairs"
-    for n, service in enumerate(services):
-        if n%1000 == 0:
-            print >> sys.stderr, n
-        if not cur_date in service.valid_dates:
-            continue
-        stop_pairs = zip(service.stops, service.stops[1:])
-        for _from, _to in stop_pairs:
-            station_pair = (_from.station, _to.station)
-            stop_time = instant(cur_date, _from.time)
-            for interval in time_intervals:
-                if stop_time >= interval[0] and stop_time < interval[1]:
-                    interval_pair_stoppings[interval][station_pair].append((service.line_id, stop_time))
-
-    return interval_pair_stoppings
 
 def calculate_max_interval(times):
     max_interval = dt.timedelta(0)
@@ -101,29 +77,6 @@ def kml_pairs(interval_pair_stoppings, stream):
 
     print >> sys.stderr, "Saving KML"
     kml.stream(stream)
-
-def gen_time_intervals(services, cur_date):
-    def stop_iter(services):
-        for service in services:
-            if not cur_date in service.valid_dates:
-                continue
-            for stop in service.stops:
-                yield stop
-
-    min_stop_time = min(stop.time for stop in stop_iter(services))
-    max_stop_time = max(stop.time for stop in stop_iter(services))
-
-    def hour_floor(td):
-        return dt.timedelta(seconds=int(td.total_seconds())/3600*3600)
-
-    def gen_intervals(min_time, max_time):
-        interval_start = hour_floor(min_time)
-        while interval_start < max_time:
-            interval_end = interval_start + dt.timedelta(seconds=3600)
-            yield (instant(cur_date, interval_start), instant(cur_date, interval_end))
-            interval_start = interval_end
-
-    return list(gen_intervals(min_stop_time, max_stop_time))
 
 def main():
     services = unmarshal(sys.stdin)
