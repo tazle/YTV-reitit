@@ -46,9 +46,9 @@ def json_stoppings(services, stream, cur_date):
     json.dump(out, stream)
 
 def main():
+    sel_date = dt.datetime.strptime(sys.argv[1], "%Y-%m-%d").date()
     services = unmarshal(sys.stdin)
     print >> sys.stderr, len(services)
-    sel_date = dt.date(2012, 04, 10)
     print >> sys.stderr, "Generating JSON"
     json_stoppings(services, sys.stdout, sel_date)
 
