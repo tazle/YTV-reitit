@@ -35,7 +35,7 @@ def json_stoppings(services, stream, cur_date):
         stop_pairs = zip(service.stops, service.stops[1:])
         for _from, _to in stop_pairs:
             station_pair = ((_from.station.name, _from.station.location), (_to.station.name, _to.station.location))
-            hours = _from.time.total_seconds()/60
+            hours = int(_from.time.total_seconds()/60)
             stoppings[station_pair].append(hours)
 
     out = []
