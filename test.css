@@ -3,6 +3,15 @@ body {
     background: #909090;
 }
 
+a:link {text-decoration: none;}
+a:visited {text-decoration: none;}
+a:hover {text-decoration: none;}
+a:active {text-decoration: none;}
+
+.dark {
+    opacity: 0.5;
+}
+
 .c-short {
     color: #14ff14;
 }

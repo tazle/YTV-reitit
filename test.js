@@ -220,6 +220,7 @@ function update_lines() {
         if (color != null) {
             var path = [new google.maps.LatLng(from[1][1], from[1][0]), new google.maps.LatLng(to[1][1], to[1][0])];
             var line = new google.maps.Polyline({map: map, path: path, strokeColor: color, zIndex: z});
+            line.setVisible(zVis[z]);
             var infowindow = null;
             google.maps.event.addListener(line, 'click', function(event) {
                 if (infowindow == null) {
@@ -246,6 +247,36 @@ function on_click() {
     });
 }
 
+zVis = ["irrelevant", true, true, true, true];
+
+function update_line_vis() {
+    $.each(lines, function (i, line) {
+        line.setVisible(zVis[line.zIndex]);
+    });
+}
+
+function mk_toggle_dark(zSel) {
+    return function toggle_dark(event) {
+        var tgt = $(event.target);
+        if (tgt.hasClass("dark")) {
+            zVis[zSel] = true;
+            tgt.removeClass("dark");
+        } else {
+            zVis[zSel] = false;
+            tgt.addClass("dark");
+        }
+        update_line_vis();
+    }
+}
+
+function init_toggle_colors() {
+    $("#short").click(mk_toggle_dark(4))
+    $("#medium").click(mk_toggle_dark(3))
+    $("#long").click(mk_toggle_dark(2))
+    $("#superlong").click(mk_toggle_dark(1));
+
+}
+
 function initialize() {
     var myOptions = {
         zoom: 16,
@@ -264,6 +295,7 @@ function initialize() {
     init_color_slider();
     load_line_data(selected_url());
     update_ui();
+    init_toggle_colors();
 }
 
 window.onload = initialize;
