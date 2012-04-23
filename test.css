@@ -1,0 +1,19 @@
+body {
+    background: #909090;
+}
+
+.c-short {
+    color: #14ff14;
+}
+
+.c-medium {
+    color: #ffff14;
+}
+
+.c-long {
+    color: #ff1414;
+}
+
+.c-superlong {
+    color: #141414;
+}

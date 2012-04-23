@@ -9,6 +9,11 @@ var map = "";
 var start_time = 7*60;
 var end_time = 9*60;
 
+var c_short = 5;
+var c_medium = 10;
+var c_long = 20;
+var c_superlong = 30;
+
 function update_slider_range() {
     var min = 36*60;
     var max = 0;
@@ -24,7 +29,7 @@ function update_slider_range() {
         }
     });
 
-    reset_slider(min, max);
+    reset_time_slider(min, max);
 }
 
 function min(v1, v2) {
@@ -57,8 +62,8 @@ function end_timer() {
     }
 }
 
-function reset_slider(begin, end) {
-    $( "#slider" ).slider({
+function reset_time_slider(begin, end) {
+    $( "#time-slider" ).slider({
 	range: true,
 	min: begin,
 	max: end,
@@ -72,6 +77,23 @@ function reset_slider(begin, end) {
     });
     $("#range-begin").text(format_hhmm(begin));
     $("#range-end").text(format_hhmm(end));
+
+}
+
+function init_color_slider() {
+    $( "#color-slider" ).slider({
+	min: 0,
+	max: 60,
+	values: [ 5, 10, 20, 30],
+	slide: function( event, slider ) {
+            c_short = slider.values[0];
+            c_medium = slider.values[1];
+            c_long = slider.values[2];
+            c_superlong = slider.values[3];
+            update_ui();
+            start_timer();
+	}
+    });
 
 }
 
@@ -104,6 +126,10 @@ function format_hhmm(tot_minutes) {
 function update_ui() {
     $("#start").text(format_hhmm(start_time));
     $("#end").text(format_hhmm(end_time));
+    $("#short").text(c_short);
+    $("#medium").text(c_medium);
+    $("#long").text(c_long);
+    $("#superlong").text(c_superlong);
 }
 
 function max_interval(stops, from, to) {
@@ -119,25 +145,45 @@ function max_interval(stops, from, to) {
     return max(max_int, last);
 }
 
+function get_color(interval) {
+    if (interval < c_short) {
+        return "#14ff14";
+    } else if (interval < c_medium) {
+        return "#ffff14"
+    } else if (interval < c_long) {
+        return "#ff1414";
+    } else if (interval < c_superlong) {
+        return "#141414";
+    } else {
+        return null;
+    }
+}
+
+var zs = {
+    "#14ff14": 4,
+    "#ffff14": 3,
+    "#ff1414": 2,
+    "#141414": 1,
+    };
+
 function update_lines() {
     $.each(lines, function(i, line) {
         line.setMap(null);
     });
 
     lines = [];
-    
+
     console.log("Updating visual lines");
     $.each(line_data, function (i, segment) {
         var from = segment[0];
         var to = segment[1];
         var stops = segment[2];
         var max_int = max_interval(stops, start_time, end_time);
-        if (i < 10) {
-            console.log(from, to, max_int);
-        }
-        if (max_int < 10) {
+        var color = get_color(max_int);
+        var z = zs[color];
+        if (color != null) {
             var path = [new google.maps.LatLng(from[1][1], from[1][0]), new google.maps.LatLng(to[1][1], to[1][0])];
-            var line = new google.maps.Polyline({map: map, path: path});
+            var line = new google.maps.Polyline({map: map, path: path, strokeColor: color});
             lines.push(line);
         }
     });
@@ -162,6 +208,7 @@ function initialize() {
         load_line_data(selected_url());
     });
 
+    init_color_slider();
     load_line_data(selected_url());
     update_ui();
 }
