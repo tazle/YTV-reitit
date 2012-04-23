@@ -39,13 +39,16 @@
         <input type="radio" name="day" value="2012-04-22.json" /> Sunday
       </form>
     </div>
-    <p>
-      From <span id="start">07:00</span> to <span id="end">09:00</span>.
+    <p style="margin-bottom: 3px;">
+      From <span id="start" style="color: #B9BCFF;">07:00</span> to <span id="end" style="color: #4444cc;">09:00</span>.
     </p>
     <div>
       <div id="range-begin" style="float: left; width: 3em; margin-right: 1em;"></div>
       <div id="time-slider-container" style="float: left; width: 80%;">
-        <div id="time-slider" style="height: 10px;"></div>
+        <div id="time-slider" style="height: 10px;">
+          <a class="ui-slider-handle" href="#" style="background: #B9BCFF;"></a>
+          <a class="ui-slider-handle" href="#" style="background: #4444cc;"></a>
+        </div>
       </div>
       <div id="range-end" style="float: left; margin-left: 1em;"></div>
     </div>
