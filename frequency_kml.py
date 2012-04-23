@@ -79,11 +79,10 @@ def kml_pairs(interval_pair_stoppings, stream):
     kml.stream(stream)
 
 def main():
+    sel_date = dt.datetime.strptime(sys.argv[1], "%Y-%m-%d").date()
     services = unmarshal(sys.stdin)
     print >> sys.stderr, len(services)
-    sel_date = dt.date(2012, 04, 10)
     time_intervals = gen_time_intervals(services, sel_date)
-    #time_intervals = [(instant(sel_date, dt.timedelta(hours=8)), instant(sel_date, dt.timedelta(hours=9)))]
     ips = gen_interval_pair_stoppings(services, sel_date, time_intervals)
     kml_pairs(ips, sys.stdout)
 
