@@ -62,6 +62,14 @@ function end_timer() {
     }
 }
 
+function prevent_line_update() {
+    update_timers += 1;
+}
+
+function enable_line_update() {
+    end_timer();
+}
+
 function reset_time_slider(begin, end) {
     $( "#time-slider" ).slider({
 	range: true,
@@ -73,7 +81,13 @@ function reset_time_slider(begin, end) {
             end_time = slider.values[1];
             update_ui();
             start_timer();
-	}
+	},
+        start: function(event, slider) {
+            prevent_line_update();
+        },
+        stop: function(event, slider) {
+            enable_line_update();
+        }
     });
     $("#range-begin").text(format_hhmm(begin));
     $("#range-end").text(format_hhmm(end));
@@ -92,7 +106,13 @@ function init_color_slider() {
             c_superlong = slider.values[3];
             update_ui();
             start_timer();
-	}
+	},
+        start: function(event, slider) {
+            prevent_line_update();
+        },
+        stop: function(event, slider) {
+            enable_line_update();
+        }
     });
 
 }
