@@ -14,20 +14,38 @@
     <script type="text/javascript"
             src="test.js"></script>
     <link rel="stylesheet" type="text/css" href="jquery-ui/css/smoothness/jquery-ui-1.8.19.custom.css"></link>
+    <link rel="stylesheet" type="text/css" href="test.css"></link>
   </head>
   <body>
-    Map:
     <div id="map_canvas" style="width: 100%; height: 500px;"></div>
-    Date Selector:
-    <form action="">
-      <ul>
-        <li><input type="radio" name="day" value="/2012-04-19.json" checked="checked" /> Thursday</li>
-        <li><input type="radio" name="day" value="/2012-04-20.json" /> Friday </li>
-        <li><input type="radio" name="day" value="/2012-04-21.json" /> Saturday </li>
-        <li><input type="radio" name="day" value="/2012-04-22.json" /> Sunday </li>
-      </ul>
-    </form>
-    From <span id="start">07:00</span> to <span id="end">09:00</span>.
-    <span id="range-begin"></span><div id="slider" style="height: 10px;"></div><span id="range-end"></span>
+    <div>
+      <p>Date Selector:</p>
+      <form action="">
+        <input type="radio" name="day" value="/2012-04-19.json" checked="checked" /> Thursday
+        <input type="radio" name="day" value="/2012-04-20.json" /> Friday
+        <input type="radio" name="day" value="/2012-04-21.json" /> Saturday
+        <input type="radio" name="day" value="/2012-04-22.json" /> Sunday
+      </form>
+    </div>
+    <p>
+      From <span id="start">07:00</span> to <span id="end">09:00</span>.
+    </p>
+    <div>
+      <div id="range-begin" style="float: left; width: 3em; margin-right: 1em;"></div>
+      <div id="time-slider-container" style="float: left; width: 80%;">
+        <div id="time-slider" style="height: 10px;"></div>
+      </div>
+      <div id="range-end" style="float: left; margin-left: 1em;"></div>
+    </div>
+    <p style="clear: left;">
+      Time limits <span class="c-short" id="short">5</span> minutes, <span class="c-medium" id="medium">10</span> minutes, <span class="c-long" id="long">20</span> minutes, <span class="c-superlong" id="superlong">30</span> minutes.
+    </p>
+    <div>
+      <div id="color-range-begin" style="float: left; width: 3em; margin-right: 1em;">0</div>
+      <div style="float: left; width: 80%">
+        <div id="color-slider" style="height: 10px;"></div>
+      </div>
+      <div id="color-range-end" style="float: left; margin-left: 1em;">60</div>
+    </div>
   </body>
 </html>

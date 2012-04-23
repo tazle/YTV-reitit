@@ -142,6 +142,10 @@ function max_interval(stops, from, to) {
         prev = time;
     });
     var last = to - prev;
+    if (max_int == 0) {
+        // Handle empty intervals
+        return to-from;
+    }
     return max(max_int, last);
 }
 
@@ -157,6 +161,18 @@ function get_color(interval) {
     } else {
         return null;
     }
+}
+
+function format_stops(stops) {
+    var result = [];
+    result.push("<ul>");
+    $.each(stops, function(i, time) {
+        if (time >= start_time && time <= end_time) {
+            result.push("<li>" + format_hhmm(time) + "</li>");
+        }
+    });
+    result.push("</ul>");
+    return result.join("");
 }
 
 var zs = {
@@ -183,7 +199,18 @@ function update_lines() {
         var z = zs[color];
         if (color != null) {
             var path = [new google.maps.LatLng(from[1][1], from[1][0]), new google.maps.LatLng(to[1][1], to[1][0])];
-            var line = new google.maps.Polyline({map: map, path: path, strokeColor: color});
+            var line = new google.maps.Polyline({map: map, path: path, strokeColor: color, zIndex: z});
+            var infowindow = null;
+            google.maps.event.addListener(line, 'click', function(event) {
+                if (infowindow == null) {
+                    infowindow = new google.maps.InfoWindow({
+                        content: format_stops(stops),
+                        position: event.latLng,
+                    });
+                }
+                infowindow.setPosition(event.latLng);
+                infowindow.open(map);
+            });
             lines.push(line);
         }
     });
@@ -191,6 +218,12 @@ function update_lines() {
 
 function selected_url() {
     return $('input:radio[name=day]:checked').val();
+}
+
+function on_click() {
+    var infowindow = new google.maps.InfoWindow({
+        content: contentString
+    });
 }
 
 function initialize() {
