@@ -52,7 +52,7 @@ var update_timers = 0;
 
 function start_timer() {
     update_timers += 1;
-    setTimeout("end_timer();",200)
+    setTimeout(end_timer, 200)
 }
 
 function end_timer() {
