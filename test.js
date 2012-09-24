@@ -155,28 +155,30 @@ function update_ui() {
 function max_interval(stops, from, to) {
     var max_int = 0;
     var prev = from;
+    var stops_found = false;
     $.each(stops, function (i, time) {
         if (time >= from && time <= to) {
             max_int = max(max_int, time - prev);
+            stops_found = true;
         }
         prev = time;
     });
-    var last = to - prev;
-    if (max_int == 0) {
-        // Handle empty intervals
+    if (!stops_found) {
+        // Handle intervals that don't contain any stoppings
         return to-from;
     }
+    var last = to - prev;
     return max(max_int, last);
 }
 
 function get_color(interval) {
-    if (interval < c_short) {
+    if (interval <= c_short) {
         return "#14ff14";
-    } else if (interval < c_medium) {
+    } else if (interval <= c_medium) {
         return "#ffff14"
-    } else if (interval < c_long) {
+    } else if (interval <= c_long) {
         return "#ff1414";
-    } else if (interval < c_superlong) {
+    } else if (interval <= c_superlong) {
         return "#141414";
     } else {
         return null;
