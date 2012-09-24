@@ -1,1 +1,9 @@
-Python code licensed under GPLv3, Java code under GPLv3 except the parts copied from Python under PSF license.
+Python code licensed under GPLv3, Java code under GPLv3 except the
+parts copied from Python under PSF license.
+
+
+Running:
+
+1. Kalkati dump: http://api.reittiopas.fi/data/all.zip
+2. Convert to intermediate format: ython convert_kalkati_file.py combination_groups.json < data-2012-09-24/LVM.xml > data-2012-09-24/LVM.ytvf
+3. Generate JSON data: python json_stoppings.py 2012-09-30 < data-2012-09-24/LVM.ytvf > 2012-09-30.json
